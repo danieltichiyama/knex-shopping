@@ -16,5 +16,10 @@
   "bugs": {
     "url": "https://github.com/danieltichiyama/knex-shopping/issues"
   },
-  "homepage": "https://github.com/danieltichiyama/knex-shopping#readme"
+  "homepage": "https://github.com/danieltichiyama/knex-shopping#readme",
+  "dependencies": {
+    "dotenv": "^8.1.0",
+    "knex": "^0.19.3",
+    "pg": "^7.12.1"
+  }
 }
