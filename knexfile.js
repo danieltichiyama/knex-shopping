@@ -5,9 +5,9 @@ const dotenv = require("dotenv").config();
 module.exports = {
   client: "postgresql",
   connection: {
-    database: "knex_shopping",
-    user: "danielti",
-    password: "password"
+    database: process.env.POSTGRES_DB,
+    user: process.env.POSTGRES_USER,
+    password: process.env.POSTGRES_PASSWORD
   },
   pool: {
     min: 2,
