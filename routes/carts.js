@@ -2,13 +2,12 @@ const express = require("express");
 const router = express.Router();
 const db = require("../db");
 
-router.get("/carts/user_id", (req, res) => {
-  db.raw(
-    "SELECT * FROM carts INNER JOIN users ON carts.user_id = users.id WHERE user_id = ?",
-    [req.params.user_id]
-  ).then(results => {
-    res.json(results.rows);
-  });
+router.get("/carts/:user_id", (req, res) => {
+  db.raw("SELECT * FROM carts WHERE user_id = ?", [req.params.user_id]).then(
+    results => {
+      res.json(results.rows);
+    }
+  );
 });
 
 router.post("/carts/:user_id/:product_id", (req, res) => {
