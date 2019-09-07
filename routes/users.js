@@ -25,13 +25,10 @@ router.get("/users/:user_id", (req, res) => {
 });
 
 router.post("/users/login", (req, res) => {
-  console.log(req.body);
-
   let errMessage;
   return db
     .raw("SELECT * FROM users WHERE email = ?", [req.body.email])
     .then(results => {
-      console.log(results.rows);
       if (results.rows.length === 0) {
         errMessage = "User not found";
         throw new Error();
@@ -42,7 +39,6 @@ router.post("/users/login", (req, res) => {
         throw new Error();
       }
 
-      console.log(results.rows);
       res.json(results.rows);
     })
     .catch(err => {
