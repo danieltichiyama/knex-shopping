@@ -3,7 +3,14 @@ const router = express.Router();
 const db = require("../db");
 
 router.get("/users/:user_id", (req, res) => {
-  db.raw("SELECT * FROM users WHERE id = ?", [req.params.user_id])
+  if (isNaN(parseInt(req.params.user_id))) {
+    return res
+      .status(400)
+      .json({ message: "Check that user_id is a number value" });
+  }
+
+  return db
+    .raw("SELECT * FROM users WHERE id = ?", [req.params.user_id])
     .then(results => {
       if (results.rows.length === 0) {
         throw new Error();
@@ -21,7 +28,8 @@ router.post("/users/login", (req, res) => {
   console.log(req.body);
 
   let errMessage;
-  db.raw("SELECT * FROM users WHERE email = ?", [req.body.email])
+  return db
+    .raw("SELECT * FROM users WHERE email = ?", [req.body.email])
     .then(results => {
       console.log(results.rows);
       if (results.rows.length === 0) {
@@ -44,7 +52,17 @@ router.post("/users/login", (req, res) => {
 });
 
 router.post("/users/register", (req, res) => {
-  db.raw("SELECT * FROM users WHERE email = ?", [req.body.email])
+  if (
+    typeof req.body.email !== "string" ||
+    typeof req.body.password !== "string"
+  ) {
+    return res
+      .status(400)
+      .json({ message: "Email and/or password is not a valid datatype." });
+  }
+
+  return db
+    .raw("SELECT * FROM users WHERE email = ?", [req.body.email])
     .then(results => {
       if (results.rows.length !== 0) {
         throw new Error();
@@ -63,18 +81,36 @@ router.post("/users/register", (req, res) => {
 });
 
 router.put("/users/:user_id/forgot-password", (req, res) => {
-  db.raw("UPDATE users SET password = ? WHERE id = ?", [
-    req.body.password,
-    req.params.user_id
-  ]).then(results => {
-    res.json({ message: "New password created!" });
-  });
+  if (isNaN(parseInt(req.params.user_id))) {
+    return res
+      .status(400)
+      .json({ message: "Check that user_id is a number value" });
+  }
+
+  if (typeof req.params.password !== "string") {
+    return res.status(400).json({ message: "New password must be a string." });
+  }
+
+  return db
+    .raw("UPDATE users SET password = ? WHERE id = ?", [
+      req.body.password,
+      req.params.user_id
+    ])
+    .then(results => {
+      res.json({ message: "New password created!" });
+    });
 });
 
 router.delete("/users/:user_id", (req, res) => {
-  db.raw("DELETE FROM users WHERE id = ?", [req.params.user_id])
+  if (isNaN(parseInt(req.params.user_id))) {
+    return res
+      .status(400)
+      .json({ message: "Check that user_id is a number value" });
+  }
+
+  return db
+    .raw("DELETE FROM users WHERE id = ?", [req.params.user_id])
     .then(results => {
-      console.log(results);
       if (results.rowCount === 0) {
         throw new Error();
       }

@@ -14,10 +14,6 @@ const PORT = 3000;
 app.use(bodyParser.json());
 
 app.get("/", (req, res) => {
-  //   db.raw("SELECT * FROM users").then(results => {
-  // console.log(results.rows);
-  // res.json(results.rows);
-  //   });
   res.send("smoke test");
 });
 
