@@ -15,7 +15,6 @@ router.get("/users/:user_id", (req, res) => {
       if (results.rows.length === 0) {
         throw new Error();
       }
-      console.log(results.rows);
       res.json(results.rows);
     })
     .catch(err => {
@@ -63,12 +62,13 @@ router.post("/users/register", (req, res) => {
       if (results.rows.length !== 0) {
         throw new Error();
       }
-      db.raw("INSERT INTO users (email,password) VALUES (?,?) RETURNING *", [
-        req.body.email,
-        req.body.password
-      ]).then(results => {
-        res.json(results.rows);
-      });
+      return db.raw(
+        "INSERT INTO users (email,password) VALUES (?,?) RETURNING *",
+        [req.body.email, req.body.password]
+      );
+    })
+    .then(results => {
+      res.json(results.rows);
     })
     .catch(err => {
       console.log(err);

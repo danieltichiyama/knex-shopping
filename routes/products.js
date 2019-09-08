@@ -106,13 +106,14 @@ router.delete("/products/:product_id", (req, res) => {
       if (results.rowCount === 0) {
         throw new Error();
       }
-      db.raw("DELETE FROM products WHERE id = ?", [req.params.product_id]).then(
-        results => {
-          res.json({
-            message: `Product id: ${req.params.product_id} successfully deleted`
-          });
-        }
-      );
+      return db.raw("DELETE FROM products WHERE id = ?", [
+        req.params.product_id
+      ]);
+    })
+    .then(results => {
+      res.json({
+        message: `Product id: ${req.params.product_id} successfully deleted`
+      });
     })
     .catch(err => {
       res
